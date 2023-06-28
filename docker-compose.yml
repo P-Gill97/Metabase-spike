@@ -1,0 +1,41 @@
+version: '3.8'
+services:
+  metabase:
+    image: metabase/metabase
+    networks:
+      - metabasenetwork
+    ports:
+      - 3000:3000
+
+    environment:
+      MB_DB_TYPE: postgres
+      MB_DB_DBNAME: postgres
+      MB_DB_PORT: 5432
+      MB_DB_USER: metabase
+      MB_DB_PASS: metabase
+      MB_DB_HOST: postgres
+  postgres:
+    image: postgres:latest
+    networks:
+      - metabasenetwork
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_USER: metabase
+      POSTGRES_DB: metabase
+      POSTGRES_PASSWORD: metabase
+    volumes:
+      - ./pg:/var/lib/postgresql/data
+  pgadmin:
+    image: "dpage/pgadmin4"
+    networks:
+      - metabasenetwork
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "5000:80"
+networks:
+  metabasenetwork:
+# Metabase admin email is openstax@email.com
+# Metabase admin password is openstaxk12
